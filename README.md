@@ -3,9 +3,7 @@
 
 ## 🛠️ Technical
 
-- React create app: Create project with react
 - Redux/redux-toolkit: Manage and pass state to components
-- Firebase: Replace BE
 - Form handler: React-hook-form/ form handler
 - Storybook: Show how to use components
 - I18n: Translate english and vietnamese
