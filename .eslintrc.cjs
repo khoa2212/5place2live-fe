@@ -6,16 +6,15 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "eslint-config-prettier",
-    "prettier",
+    "prettier"
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs", "vite.config.ts"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react-refresh", "prettier"],
+  plugins: ["react-refresh", "prettier", "simple-import-sort"],
   rules: {
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
-    ],
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
     "prettier/prettier": [
       "warn",
       {
@@ -25,10 +24,37 @@ module.exports = {
         tabWidth: 2,
         endOfLine: "auto",
         useTabs: false,
-        singleQuote: true,
-        printWidth: 120,
-        jsxSingleQuote: true,
-      },
-    ],
+        singleQuote: false,
+        printWidth: 100,
+        jsxSingleQuote: true
+      }
+    ]
   },
-};
+  overrides: [
+    // override "simple-import-sort" config
+    {
+      files: ["*.js", "*.jsx", "*.ts", "*.tsx"],
+      rules: {
+        "simple-import-sort/imports": [
+          "error",
+          {
+            groups: [
+              // Packages `react` related packages come first.
+              ["^react", "^@?\\w"],
+              // Internal packages.
+              ["^(@|components)(/.*|$)"],
+              // Side effect imports.
+              ["^\\u0000"],
+              // Parent imports. Put `..` last.
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              // Other relative imports. Put same-folder imports and `.` last.
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+              // Style imports.
+              ["^.+\\.?(css)$"]
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
